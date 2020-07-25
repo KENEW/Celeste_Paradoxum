@@ -9,7 +9,7 @@ public class Character : MonoBehaviour
 
     public bool IsFlip = false;
 
-    public int Hp = 100;
+    public int Hp = 10;
     public int TimeGauge = 100;
 
     public float MoveSpeed = 10.0f;
@@ -200,6 +200,28 @@ public class Character : MonoBehaviour
 
                 rigidbody.AddForce(((IsFlip) ? Vector2.left : Vector2.right) * TimeDashPower, ForceMode2D.Impulse);
             }
+        }
+    }
+
+    private void Damaging()
+    {
+        Hp--;
+        if (Hp < 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Fist"))
+        {
+            Damaging();
+        }
+
+        if (collision.CompareTag("Dash"))
+        {
+            Damaging();
         }
     }
 }

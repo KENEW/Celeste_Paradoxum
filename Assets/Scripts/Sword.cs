@@ -30,6 +30,9 @@ public class Sword : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
+            Boss bossObject = collision.gameObject.GetComponent<Boss>();
+            bossObject.Damaging();
+
             Instantiate(ExpParticle, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
             Destroy(gameObject);
         }

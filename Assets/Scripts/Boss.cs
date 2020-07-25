@@ -10,6 +10,8 @@ public class Boss : MonoBehaviour
     protected Animator animator;
     protected SpriteRenderer sprRenderer;
 
+    protected GameObject charObj;
+
     protected virtual void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
@@ -19,21 +21,30 @@ public class Boss : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (charObj == null)
+        {
+            charObj = GameObject.FindGameObjectWithTag("Player");
+        }
+        else
+        {
+            Attack();
+
+            Vector2 vecDir = (charObj.transform.position - transform.position);
+            if (vecDir.x < 0) transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            else if (vecDir.x > 0) transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+        }
     }
 
     protected virtual void Attack()
     {
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public virtual void Damaging()
     {
-        if (collision.CompareTag("Sword"))
+        Hp--;
+        if (Hp < 0)
         {
-            Hp--;
-            if (Hp < 0)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 }
