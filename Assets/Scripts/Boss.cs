@@ -17,11 +17,23 @@ public class Boss : MonoBehaviour
         sprRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
     }
 
     protected virtual void Attack()
     {
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Sword"))
+        {
+            Hp--;
+            if (Hp < 0)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 }
