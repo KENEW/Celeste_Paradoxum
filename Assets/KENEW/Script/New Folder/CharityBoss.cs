@@ -6,7 +6,7 @@ public class CharityBoss : Boss
 {
 	public GameObject Player = null;
 
-	[SerializeField] float dashSpeed = 70.0f;
+	[SerializeField] float dashSpeed = 30.0f;
 	[SerializeField] float dashVector = 2f;
 	int curDashCount = 0;
 	const int DashCount = 2;
@@ -15,6 +15,7 @@ public class CharityBoss : Boss
 	protected override void Start()
 	{
 		base.Start();
+		InvokeRepeating("DashAttack", 2f, 4f);
 	}
 
 	protected override void Update()
@@ -33,12 +34,10 @@ public class CharityBoss : Boss
 
 		if (playPos.x - transform.position.x < 0)
 		{
-			transform.localScale = new Vector3(1, 1, 1);
 			moveDir = Vector2.left;
 		}
 		else
 		{
-			transform.localScale = new Vector3(-1, 1, 1);
 			moveDir = Vector2.right;
 		}
 
@@ -47,17 +46,17 @@ public class CharityBoss : Boss
 
 	IEnumerator DashAttackCo()
 	{
-		animator.SetTrigger("Dash");
+		animator.SetBool("Dash", true);
 
 		Vector2 destPos = new Vector2(transform.position.x + ((-1 * dashVector) * transform.localScale.x), transform.position.y);
 		while (Vector2.Distance(destPos, transform.position) >= 0.3f)
 		{
-			transform.Translate(moveDir * Time.deltaTime * dashSpeed);
+			rigidbody.AddForce(moveDir * dashSpeed, ForceMode2D.Impulse);
+			//transform.Translate(moveDir * Time.deltaTime * dashSpeed);
 			yield return null;
 		}
 
-		animator.ResetTrigger("Dash");
-		//animator.SetTrigger("IdleTrigger");
+		animator.SetBool("Dash", false);
 	}
 	
 	IEnumerator DelayCo(float time)
@@ -65,4 +64,6 @@ public class CharityBoss : Boss
 		yield return new WaitForSeconds(time);
 		StartCoroutine(DashAttackCo());
 	}
+
+
 }
