@@ -44,9 +44,10 @@ public class Boss : MonoBehaviour
     public virtual void Damaging()
     {
         Hp--;
-        if (Hp < 0)
+        if (Hp <= 0)
         {
             UIManager.Instance.SeeClearScreen();
+            UIManager.Instance.SetBossHpGauge(Hp);
             Destroy(gameObject);
         }
     }

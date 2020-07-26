@@ -3,6 +3,10 @@ using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
+    public AudioClip AttackSound;
+    public AudioClip SweepSetSound;
+    public AudioClip SweepSound;
+
     public GameObject TimeEffectObject;
     public GameObject TrailObject;
     private Vector3 sweepPosition = Vector3.zero;
@@ -187,6 +191,8 @@ public class Character : MonoBehaviour
             {
                 attackTimer.IsEnable = true;
 
+                SoundManager.Instance.PlaySFX(AttackSound);
+
                 Instantiate(SwordPrefab, transform.position, Quaternion.Euler(0, 0, (IsFlip) ? 180.0f : 0.0f));
 
                 imageAnimator.SetTrigger("Attacking");
@@ -226,6 +232,8 @@ public class Character : MonoBehaviour
                 {
                     if (TimeGauge > 50)
                     {
+                        SoundManager.Instance.PlaySFX(SweepSetSound);
+
                         TimeGauge -= 50;
 
                         isSweeped = false;
@@ -240,6 +248,8 @@ public class Character : MonoBehaviour
                 }
                 else
                 {
+                    SoundManager.Instance.PlaySFX(SweepSound);
+
                     timeSweepTimer.IsEnable = true;
 
                     isSweeped = true;
@@ -262,8 +272,11 @@ public class Character : MonoBehaviour
     {
         cameraCtrl.Shake(0.5f, 10.0f);
         Hp--;
-        if (Hp < 0)
+        if (Hp <= 0)
         {
+            UIManager.Instance.SeeFailScreen();
+            UIManager.Instance.SetHpGauge(Hp);
+            UIManager.Instance.SetTimeGauge(TimeGauge);
             Destroy(gameObject);
         }
     }

@@ -260,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebdcf061196eb14b922f1882507bb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HitSound: {fileID: 8300000, guid: 729d13a39a999b947a74d8db44ad3ed0, type: 3}
   SwordEffect: {fileID: 2761601835722744087, guid: 605b667a86aa54e42b90ea12ba4b2537,
     type: 3}
   ExpParticle: {fileID: 6335943045098809369, guid: eb8c6b544ae1ff74ab8f6d671429ce01,

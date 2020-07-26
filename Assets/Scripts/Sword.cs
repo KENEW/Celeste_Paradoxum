@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
+    public AudioClip HitSound;
+
     public GameObject SwordEffect;
     public GameObject ExpParticle;
 
@@ -30,6 +32,8 @@ public class Sword : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
+            SoundManager.Instance.PlaySFX(HitSound);
+
             Boss bossObject = collision.gameObject.GetComponent<Boss>();
             bossObject.Damaging();
 

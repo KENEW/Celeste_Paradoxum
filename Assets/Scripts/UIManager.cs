@@ -13,6 +13,7 @@ public class UIManager : MonoSingleton<UIManager>
     public Text TimeText;
 
     public GameObject ClearPanel;
+    public GameObject FailPanel;
 
     private int hpValue = 0;
     private int timeValue = 0;
@@ -49,5 +50,10 @@ public class UIManager : MonoSingleton<UIManager>
     public void SeeClearScreen()
     {
         ClearPanel.SetActive(true);
+    }
+
+    public void SeeFailScreen()
+    {
+        FailPanel.SetActive(true);
     }
 }

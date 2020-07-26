@@ -146,7 +146,7 @@ public class Patience : Boss
         if (!IsGuard)
         {
             Hp--;
-            if (Hp < 0)
+            if (Hp <= 0)
             {
                 UIManager.Instance.SeeClearScreen();
                 Destroy(gameObject);
