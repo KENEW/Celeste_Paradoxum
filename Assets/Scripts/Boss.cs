@@ -33,6 +33,8 @@ public class Boss : MonoBehaviour
             if (vecDir.x < 0) transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             else if (vecDir.x > 0) transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
         }
+
+        UIManager.Instance.SetBossHpGauge(Hp);
     }
 
     protected virtual void Attack()
@@ -44,6 +46,7 @@ public class Boss : MonoBehaviour
         Hp--;
         if (Hp < 0)
         {
+            UIManager.Instance.SeeClearScreen();
             Destroy(gameObject);
         }
     }

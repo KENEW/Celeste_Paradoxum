@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour
 {
     public Transform Target = null;
     public float Speed = 5.0f;
+    public float Scale = 5.0f;
     public Vector3 Offset = Vector3.zero;
 
     public Camera cameraObject;
@@ -51,7 +52,7 @@ public class CameraController : MonoBehaviour
         rgbSplit.BCoord = (isRGBSplit) ? new Vector2(Random.Range(-shakePower, shakePower), Random.Range(-shakePower, shakePower)) : Vector2.zero;
 
         transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0.0f, 0.0f, angleAmount), 5.0f * Time.deltaTime);
-        cameraObject.orthographicSize = Mathf.Lerp(cameraObject.orthographicSize, 5.0f * scaleAmount, 5.0f * Time.deltaTime);
+        cameraObject.orthographicSize = Mathf.Lerp(cameraObject.orthographicSize, Scale * scaleAmount, 5.0f * Time.deltaTime);
     }
 
     public void Shake(float power, float amount, bool rgbsplit = false, bool xshake = true, bool yshake = true)
@@ -80,6 +81,6 @@ public class CameraController : MonoBehaviour
 
     public void Scaling(float scale)
     {
-        cameraObject.orthographicSize = 5.0f * scale;
+        cameraObject.orthographicSize = Scale * scale;
     }
 }

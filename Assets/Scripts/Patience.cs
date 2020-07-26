@@ -44,7 +44,15 @@ public class Patience : Boss
                     IsEnable = true
                 };
                 animator.SetTrigger("Dashing");
-                Vector2 vecDir = (charObj.transform.position - transform.position).normalized;
+
+                float positionTemp = charObj.transform.position.x - transform.position.x;
+                Vector2 vecDir = Vector2.zero;
+
+                if (positionTemp >= 0)
+                    vecDir = Vector2.right;
+                else
+                    vecDir = Vector2.left;
+
                 rigidbody.AddForce(vecDir * DashSpeed, ForceMode2D.Impulse);
             }
             else if (attackPhase < 4)
@@ -140,6 +148,7 @@ public class Patience : Boss
             Hp--;
             if (Hp < 0)
             {
+                UIManager.Instance.SeeClearScreen();
                 Destroy(gameObject);
             }
         }

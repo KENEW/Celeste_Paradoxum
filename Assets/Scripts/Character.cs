@@ -3,6 +3,11 @@ using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
+    public GameObject TimeEffectObject;
+    public GameObject TrailObject;
+    private Vector3 sweepPosition = Vector3.zero;
+    private bool isSweeped = true;
+
     public GameObject ImageObject;
 
     public GameObject SwordPrefab;
@@ -57,6 +62,7 @@ public class Character : MonoBehaviour
     private Timer attackTimer;
 
     private Timer timeDashTimer;
+    private Timer timeSweepTimer;
 
     private Timer gaugeTimer;
 
@@ -74,6 +80,7 @@ public class Character : MonoBehaviour
         dashTapTimer = new Timer(0.25f, false) { IsEnable = true };
         attackTimer = new Timer(0.35f, false) { IsEnable = true };
         timeDashTimer = new Timer(0.5f, false) { IsEnable = true };
+        timeSweepTimer = new Timer(5.0f, false) { IsEnable = true };
         gaugeTimer = new Timer(0.2f, true) { IsEnable = true };
 
         timeDashGhostTimer = new Timer(0.5f, false) { IsEnable = false };
@@ -88,6 +95,7 @@ public class Character : MonoBehaviour
         Jump();
         Attack();
         TimeDash();
+        TimeSweep();
 
         if (TimeGauge < 100)
         {
@@ -101,6 +109,9 @@ public class Character : MonoBehaviour
             for (int i = 0; i < ghostSprites.Length; i++)
                 ghostSprites[i].IsEnable = false;
         }
+
+        UIManager.Instance.SetHpGauge(Hp);
+        UIManager.Instance.SetTimeGauge(TimeGauge);
 
         Debug.DrawRay(transform.position, Vector2.down * 1.5f, Color.green);
     }
@@ -179,7 +190,7 @@ public class Character : MonoBehaviour
                 Instantiate(SwordPrefab, transform.position, Quaternion.Euler(0, 0, (IsFlip) ? 180.0f : 0.0f));
 
                 imageAnimator.SetTrigger("Attacking");
-                cameraCtrl.Shake(0.25f, 10.0f);
+                cameraCtrl.Shake(0.1f, 10.0f);
             }
         }
     }
@@ -198,13 +209,58 @@ public class Character : MonoBehaviour
                 for (int i = 0; i < ghostSprites.Length; i++)
                     ghostSprites[i].IsEnable = true;
 
+                TrailObject.SetActive(false);
+
                 rigidbody.AddForce(((IsFlip) ? Vector2.left : Vector2.right) * TimeDashPower, ForceMode2D.Impulse);
+            }
+        }
+    }
+
+    private void TimeSweep()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (timeSweepTimer.IsDone)
+            {
+                if (isSweeped)
+                {
+                    if (TimeGauge > 50)
+                    {
+                        TimeGauge -= 50;
+
+                        isSweeped = false;
+
+                        sweepPosition = transform.position;
+
+                        TrailObject.SetActive(true);
+
+                        TimeEffectObject.SetActive(true);
+                        TimeEffectObject.transform.position = sweepPosition;
+                    }
+                }
+                else
+                {
+                    timeSweepTimer.IsEnable = true;
+
+                    isSweeped = true;
+
+                    timeDashGhostTimer.IsEnable = true;
+
+                    GhostSprite[] ghostSprites = ImageObject.GetComponentsInChildren<GhostSprite>();
+                    for (int i = 0; i < ghostSprites.Length; i++)
+                        ghostSprites[i].IsEnable = true;
+
+                    transform.position = sweepPosition;
+
+                    TimeEffectObject.SetActive(false);
+                }
             }
         }
     }
 
     private void Damaging()
     {
+        cameraCtrl.Shake(0.5f, 10.0f);
         Hp--;
         if (Hp < 0)
         {
